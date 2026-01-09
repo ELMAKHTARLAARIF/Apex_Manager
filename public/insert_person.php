@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 require_once __DIR__ . '/../autoload.php';
 session_start();
 
@@ -14,10 +17,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email']);
     $nationalite = trim($_POST['nationalite']);
     $type = $_POST['type'];
-
     try {
         if ($type === 'joueur') {
-   
+
             $joueur = new Joueur(
                 $nom,
                 $email,
@@ -25,12 +27,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 trim($_POST['pseudo']),
                 trim($_POST['role']),
                 floatval($_POST['salaire']),
-                floatval($_POST['primeSignature'])
+                floatval($_POST['bonus'])
             );
 
+    $repo = new JoueursRepo();
+    $repo->save($pdo,$joueur);
 
-            $joueur->save($pdo);
-
+            // $repo->addToTeam($pdo, $joueur->id, 3);
         } elseif ($type === 'coach') {
             $coach = new Coach(
                 $nom,
@@ -49,7 +52,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['success'] = ucfirst($type) . " ajouté(e) avec succès !";
         header("Location: ../roles/index.php");
         exit;
-
     } catch (Exception $e) {
         $_SESSION['error'] = "Erreur lors de l'ajout : " . $e->getMessage();
         header("Location: add_person.php");

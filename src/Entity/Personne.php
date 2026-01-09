@@ -6,5 +6,5 @@ abstract class Personne {
         public string $nationalite
     ) {}
 
-    abstract public function getAnnualCost(): float;
+    // abstract public function getAnnualCost(): float;
 }

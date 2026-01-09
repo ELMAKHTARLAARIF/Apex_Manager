@@ -1,7 +1,10 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 require_once __DIR__ . '/../autoload.php';
 $pdo = Database::getInstance()->getConnection();
-$teams = Equipe::all($pdo);
+$teams = EquipeRepo::all($pdo);
 
 ?>
 
@@ -15,10 +18,9 @@ $teams = Equipe::all($pdo);
 </head>
 
 <body>
-    <header>
-        <h1>Modifier Budget Équipe</h1>
-        <nav><a href="../roles/index.php">Dashboard Admin</a></nav>
-    </header>
+<?php
+require_once './assets/header.php';
+?>
 
     <main class="container">
         <form action="update_budget.php" method="post">
@@ -34,7 +36,6 @@ $teams = Equipe::all($pdo);
             <input type="number" step="0.01" name="budget" required>
             <button type="submit">Mettre à jour</button>
         </form>
-        <?= $team_id ?>
     </main>
 </body>
 </html>

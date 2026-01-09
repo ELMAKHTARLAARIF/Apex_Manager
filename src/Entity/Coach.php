@@ -11,14 +11,14 @@ class Coach extends Personne {
         public string $nationalite,
         public string $styleDeCoaching,
         public int $anneesExperience,
-        public float $salaire,
+        public float $amount,
         public float $fraisDeplacement
     ) {
         parent::__construct($nom, $email, $nationalite);
     }
 
     public function getAnnualCost(): float {
-        return $this->salaire * 12 + $this->fraisDeplacement;
+        return $this->amount * 12 + $this->fraisDeplacement;
     }
 
     public function addToTeam(PDO $pdo, int $teamId): void {
@@ -53,7 +53,7 @@ class Coach extends Personne {
             $this->nationalite,
             $this->styleDeCoaching,
             $this->anneesExperience,
-            $this->salaire,
+            $this->amount,
             $this->fraisDeplacement
         ]);
         $this->id = (int)$pdo->lastInsertId();

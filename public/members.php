@@ -1,15 +1,14 @@
 <?php
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 require_once __DIR__ . '/../autoload.php';
 session_start();
 $pdo = Database::getInstance()->getConnection();
 
-$players = Joueur::all($pdo);
+$players = JoueursRepo::all($pdo);
 $coachs = Coach::all($pdo);
-$members = array_merge(
-    array_map(fn($j)=>array_merge(get_object_vars($j), ['type'=>'Joueur']), $players),
-    array_map(fn($c)=>array_merge(get_object_vars($c), ['type'=>'Coach']), $coachs)
-);
-
 ?>
 
 <!DOCTYPE html>
@@ -23,10 +22,7 @@ $members = array_merge(
 </head>
 
 <body>
-    <header>
-        <h1>Liste des membres</h1>
-        <nav><a href="../roles/index.php">Dashboard Admin</a></nav>
-    </header>
+    <?php require_once './assets/secondHeader.php' ?>
 
     <main class="container">
 
@@ -43,24 +39,23 @@ $members = array_merge(
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($members as $m): ?>
+                <?php foreach ($players as $player): ?>
                     <tr>
-                        <td><?= htmlspecialchars($m['type'] === 'Joueur' ? $m['pseudo'] : $m['nom']) ?></td>
-                        <td><?= htmlspecialchars($m['email']) ?></td>
-                        <td><?= htmlspecialchars($m['nationalite']) ?></td>
-                        <td><?= htmlspecialchars($m['type']) ?></td>
-                        <td>
-                            <?php if ($m['type'] === 'Joueur'): ?>
-                                Rôle: <?= htmlspecialchars($m['role']) ?><br>
-                                Salaire: <?= number_format($m['salaire'], 2, ',', ' ') ?> €<br>
-                                Prime: <?= number_format($m['bonus'], 2, ',', ' ') ?> €
-                            <?php else: ?>
-                                Style: <?= htmlspecialchars($m['styleDeCoaching']) ?><br>
-                                Années exp: <?= htmlspecialchars($m['anneesExperience']) ?><br>
-                                Salaire: <?= number_format($m['salaire'], 2, ',', ' ') ?> €<br>
-                                Frais déplacement: <?= number_format($m['fraisDeplacement'], 2, ',', ' ') ?> €
-                            <?php endif; ?>
-                        </td>
+                        <td><?= htmlspecialchars($player['pseudo']) ?></td>
+                        <td><?= htmlspecialchars($player['email']) ?></td>
+                        <td><?= htmlspecialchars($player['nationalite']) ?></td>
+                        <td>Joueur</td>
+                        <td>Amount: <?= number_format($player['salaire'], 0, ',', ' ') ?> €<br>Bonus: <?= $player['bonus'], 0, ',', ' ' ?> €</td>
+                    </tr>
+                <?php endforeach; ?>
+
+                <?php foreach ($coachs as $coach): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($coach->nom) ?></td>
+                        <td><?= htmlspecialchars($coach->email) ?></td>
+                        <td><?= htmlspecialchars($coach->nationalite) ?></td>
+                        <td>Coach</td>
+                        <td>Style de coaching: <?= htmlspecialchars($coach->styleDeCoaching) ?><br>Années d'expérience: <?= (int) $coach->anneesExperience ?></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>

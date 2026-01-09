@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 require_once __DIR__ . '/../autoload.php';
 session_start();
 
@@ -13,13 +16,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $team_id = (int) $_POST['team_id'];
     $newBudget = (float) $_POST['budget'];
 
-    $team = Equipe::find($pdo, $team_id);
+    $team = EquipeRepo::find($pdo, $team_id);
 
     if (!$team) {
         die("Équipe introuvable !");
     }
 
-    $team->updateBudget($pdo, $newBudget);
+    EquipeRepo::updateBudget($pdo,$team_id, $newBudget);
     $id=$team->id;
     header("Location: edit_budget_form.php");
     exit;

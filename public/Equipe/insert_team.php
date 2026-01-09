@@ -1,15 +1,18 @@
 <?php
-require_once __DIR__ . '/../autoload.php';
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+require_once __DIR__ . '/../../autoload.php';
 session_start();
 $pdo = Database::getInstance()->getConnection();
 
 if($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $team = new Equipe($_POST['nom'], (float)$_POST['budget'], $_POST['manager']);
-    $team->save($pdo);
-    header("Location: ../roles/index.php?success=1");
+    $equipe = new Equipe($_POST['nom'], (float)$_POST['budget'], $_POST['manager']);
+    $equipeRepo = new EquipeRepo();
+    $equipeRepo->createEquipe($pdo,$equipe);
+    header("location: /../Apex_Mercato/roles/index.php");
     exit;
 }
-
 ?>
 
 <!DOCTYPE html>

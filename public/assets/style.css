@@ -418,3 +418,118 @@ body.login-page {
         padding: 10px;
     }
 }
+.delete{
+    color: red;
+    width: 60px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid rgb(21, 19, 19);
+    border-radius: 5px;
+    font-weight: bold;
+}
+.delete:hover{
+    background-color: red;
+    color: white;
+    cursor: pointer;
+}
+/* Modal background */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(3, 23, 22, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.3s ease;
+}
+
+/* Show modal */
+.modal.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Modal box */
+.modal-box {
+  background: #032F30;
+  color: #EAF7F7;
+  padding: 1.5rem;
+  width: 300px;
+  border-radius: 14px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  animation: pop 0.3s ease;
+}
+
+@keyframes pop {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.modal-box h3 {
+  margin-bottom: 0.5rem;
+}
+
+.modal-box p {
+  font-size: 0.9rem;
+  color: #6BA3BE;
+  margin-bottom: 1.5rem;
+}
+
+/* Buttons */
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* Cancel button */
+.btn.cancel {
+  background: #274D60;
+  color: #fff;
+}
+
+/* Delete button */
+.btn.delete {
+  background: #0C969C;
+  color: #031716;
+}
+
+.btn.delete:hover {
+  background: #6BA3BE;
+}
+.add_button{
+    background-color: #032F30;
+    margin: 10px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition:  0.3s ease;
+}
+.add_button a{
+    color: white;
+    text-decoration: none;
+}
+.add_button:hover{
+    background-color: #0C969C;
+    color: #031716;
+}

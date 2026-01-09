@@ -1,9 +1,10 @@
 <?php
-require_once __DIR__ . '/../autoload.php';
+
+require_once __DIR__ . '/../../autoload.php';
 $pdo = Database::getInstance()->getConnection();
 
-$joueurs = Joueur::all($pdo);
-$teams = Equipe::all($pdo);
+$joueurs = JoueursRepo::all($pdo);
+$teams = EquipeRepo::all($pdo);
 ?>
 
 <!DOCTYPE html>
@@ -12,14 +13,11 @@ $teams = Equipe::all($pdo);
 <head>
     <meta charset="UTF-8">
     <title>Transfert Joueur</title>
-    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="../assets/style.css">
 </head>
 
 <body>
-    <header>
-        <h1>Transfert Joueur</h1>
-        <nav><a href="../roles/index.php">Dashboard Admin</a></nav>
-    </header>
+    <?php session_start(); require_once '../assets/secondHeader.php' ?>
 
     <main class="container">
         <form action="transfer_player.php" method="post">
@@ -34,13 +32,6 @@ $teams = Equipe::all($pdo);
                 <?php endforeach; ?>
             </select>
 
-            <label>Équipe source :</label>
-            <select name="from_team_id" required>
-                <option value="">-- Choisir équipe source --</option>
-                <?php foreach ($teams as $t): ?>
-                    <option value="<?= $t->id ?>"><?= htmlspecialchars($t->nom) ?></option>
-                <?php endforeach; ?>
-            </select>
 
             <label>Équipe destination :</label>
             <select name="to_team_id" required>

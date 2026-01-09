@@ -12,145 +12,83 @@ if (!isAdmin()) {
 
 $pdo = Database::getInstance()->getConnection();
 
-$teams = Equipe::all($pdo);
-$members = Joueur::all($pdo);  
+$teams = EquipeRepo::all($pdo);
+$members = JoueursRepo::all($pdo);
 ?>
 
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <title>Equipes – Apex Manager</title>
     <link rel="stylesheet" href="../public/assets/style.css">
+    <script src="../public/assets/Coach.js" defer></script>
 </head>
+
 <body>
-<?php require_once '../public/assets/header.php' ?>
+    <?php require_once '../public/assets/header.php' ?>
 
-<main class="container">
+    <main class="container">
 
-    <section class="card">
-        <h2>Ajouter un Joueur ou un Coach</h2>
-        <form action="../public/insert_person.php" method="post">
-            <h3>Informations communes</h3>
-            <label>Nom :</label>
-            <input type="text" name="nom" required>
+        <section class="card">
+            <h2>Liste des équipes</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Budget</th>
+                        <th>Manager</th>
+                        <th>Membres</th>
+                        <th>action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($teams as $team): ?>
+                        <tr>
+                            <td><?= htmlspecialchars($team->nom) ?></td>
+                            <td><?= number_format($team->budget, 2, ',', ' ') ?> €</td>
+                            <td><?= htmlspecialchars($team->manager) ?></td>
+                            <td>
+                                <?php
 
-            <label>Email :</label>
-            <input type="email" name="email" required>
+                                foreach ($members as $m) {
+                                    echo htmlspecialchars($m->pseudo ?? $m['nom']) . " (" . ($m->type ?? 'coach') . ")<br>";
+                                }
+                                ?>
+                            </td>
+                            <td>
+                                <a class="delete deleteEquipe" href="../public/Equipe/delete_Equipe.php?id=<?=$team->id?>">Delete</a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+            <button class="add_button JouCoa"><a href="../public/joueur/Add_Joueur_Coach_form.php">Ajouter un Joueur ou un Coach</a></button>
+            <button class="add_button AddEquipe"><a href="../public/Equipe/Add_Equipe_form.php">Ajouter un Equipe</a></button>
+            <button class="add_button AddEquipe"><a href="../public/Equipe/Add_Equipe_form.php">Ajouter un Joueur dans L'Equipe</a></button>
 
-            <label>Nationalité :</label>
-            <input type="text" name="nationalite" required>
+        </section>
+        <!-- Delete Confirmation Modal -->
+        <div class="modal" id="deleteModal">
+            <div class="modal-box">
+                <h3>Delete Coach</h3>
+                <p class="message">Are you sure you want to delete this coach?</p>
 
-            <h3>Type de personne</h3>
-            <select name="type" required>
-                <option value="">-- Choisir --</option>
-                <option value="joueur">Joueur</option>
-                <option value="coach">Coach</option>
-            </select>
+                <div class="modal-actions">
+                    <button class="btn cancel" onclick="closeModal()">Cancel</button>
+                    <button class="btn delete" id="confirmDeleteBtn">Delete</button>
 
-            <div id="joueur-fields" style="display:none">
-                <h4>Joueur</h4>
-                <label>Pseudo :</label>
-                <input type="text" name="pseudo">
-
-                <label>Rôle :</label>
-                <input type="text" name="role">
-
-                <label>Salaire :</label>
-                <input type="number" step="0.01" name="salaire">
-
-                <label>Bonus :</label>
-                <input type="number" step="0.01" name="bonus">
+                </div>
             </div>
+        </div>
 
-            <div id="coach-fields" style="display:none">
-                <h4>Coach</h4>
-                <label>Style de coaching :</label>
-                <input type="text" name="styleDeCoaching">
 
-                <label>Années d'expérience :</label>
-                <input type="number" name="anneesExperience">
 
-                <label>Salaire :</label>
-                <input type="number" step="0.01" name="coachSalaire">
-            </div>
+    </main>
 
-            <button type="submit">Ajouter</button>
-        </form>
-    </section>
 
-    <section class="card">
-        <h2>Créer une nouvelle équipe</h2>
-        <form action="../public/insert_team.php" method="POST">
-            <label>Nom de l'équipe :</label>
-            <input type="text" name="nom" required>
-
-            <label>Budget :</label>
-            <input type="number" step="0.01" name="budget" required>
-
-            <label>Manager :</label>
-            <input type="text" name="manager" required>
-
-            <button type="submit">Créer l'équipe</button>
-        </form>
-    </section>
-
-    <section class="card">
-        <h2>Liste des équipes</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Nom</th>
-                    <th>Budget</th>
-                    <th>Manager</th>
-                    <th>Membres</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($teams as $team): ?>
-                <tr>
-                    <td><?= htmlspecialchars($team->nom) ?></td>
-                    <td><?= number_format($team->budget, 2, ',', ' ') ?> €</td>
-                    <td><?= htmlspecialchars($team->manager) ?></td>
-                    <td>
-                        <?php
-
-                        foreach ($members as $m) {
-                            echo htmlspecialchars($m->pseudo?? $m['nom']) . " (" . ($m->type ?? 'coach') . ")<br>";
-                        }
-                        ?>
-                    </td>
-                </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    </section>
-
-</main>
-
-<script>
-
-    const typeSelect = document.querySelector('select[name="type"]');
-    console.log(typeSelect);
-    const joueurFields = document.getElementById('joueur-fields');
-    const coachFields = document.getElementById('coach-fields');
-
-    function toggleFields() {
-        if(typeSelect.value === 'joueur') {
-            joueurFields.style.display = 'block';
-            coachFields.style.display = 'none';
-        } else if(typeSelect.value === 'coach') {
-            joueurFields.style.display = 'none';
-            coachFields.style.display = 'block';
-        } else {
-            joueurFields.style.display = 'none';
-            coachFields.style.display = 'none';
-        }
-    }
-
-    typeSelect.addEventListener('change', toggleFields);
-    toggleFields();
-</script>
 
 </body>
+
 </html>
