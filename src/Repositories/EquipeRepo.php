@@ -6,20 +6,20 @@ class EquipeRepo
     {
         if ($equipe->id !== null) {
             $stmt = $pdo->prepare(
-                "UPDATE equipes SET nom=?, budget=?, manager=? WHERE id=?"
+                "UPDATE teams SET name=?, budget=?, manager=? WHERE id=?"
             );
             $stmt->execute([
-                $equipe->nom,
+                $equipe->name,
                 $equipe->budget,
                 $equipe->manager,
                 $equipe->id
             ]);
         } else {
             $stmt = $pdo->prepare(
-                "INSERT INTO equipes (nom, budget, manager) VALUES (?, ?, ?)"
+                "INSERT INTO teams (name, budget, manager) VALUES (?, ?, ?)"
             );
             $stmt->execute([
-                $equipe->nom,
+                $equipe->name,
                 $equipe->budget,
                 $equipe->manager
             ]);
@@ -27,40 +27,36 @@ class EquipeRepo
         }
     }
 
-    public function createEquipe($pdo,Equipe $equipe):void{
+    public function createEquipe($pdo, Equipe $equipe): void
+    {
 
-        $stmt = $pdo->prepare("INSERT INTO equipes (nom,budget,manager) VALUE (?,?,?)");
-        $stmt->execute([$equipe->nom,$equipe->budget,$equipe->manager]);
+        $stmt = $pdo->prepare("INSERT INTO teams (name,budget,manager) VALUE (?,?,?)");
+        $stmt->execute([$equipe->name, $equipe->budget, $equipe->manager]);
         $equipe->id = $pdo->lastInsertId();
-        
     }
 
-    public function updateEquipe($pdo,Equipe $equipe){
+    public function updateEquipe($pdo, Equipe $equipe)
+    {
         if ($equipe->id === null) {
             throw new InvalidArgumentException(
                 "Cannot update an Equipe without an ID"
             );
         }
-        $stmt = $pdo->prepare("UPDATE equipes set nom = ?  budget = ? manager = ?");
-        $stmt->execute([$equipe->nom,$equipe->budget,$equipe->manager,$equipe->id]);
+        $stmt = $pdo->prepare("UPDATE teams set name = ?  budget = ? manager = ?");
+        $stmt->execute([$equipe->name, $equipe->budget, $equipe->manager, $equipe->id]);
     }
 
     public static function all(PDO $pdo): array
     {
-        $stmt = $pdo->query("SELECT * FROM equipes ORDER BY nom ASC");
-        $teams = [];
+        $stmt = $pdo->query("SELECT * FROM teams ORDER BY name ASC");
 
-        foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $t) {
-            $team = new Equipe($t['nom'], (float)$t['budget'], $t['manager']);
-            $team->id = (int)$t['id'];
-            $teams[] = $team;
-        }
-        return $teams;
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
     }
 
     public static function find(PDO $pdo, int $id): ?Equipe
     {
-        $stmt = $pdo->prepare("SELECT * FROM equipes WHERE id = ?");
+        $stmt = $pdo->prepare("SELECT * FROM teams WHERE id = ?");
         $stmt->execute([$id]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -68,7 +64,7 @@ class EquipeRepo
             return null;
         }
 
-        $team = new Equipe($row['nom'], (float)$row['budget'], $row['manager']);
+        $team = new Equipe($row['name'], (float)$row['budget'], $row['manager']);
         $team->id = (int)$row['id'];
         return $team;
     }
@@ -76,7 +72,7 @@ class EquipeRepo
     public static function updateBudget(PDO $pdo, int $id, float $newBudget): bool
     {
         $stmt = $pdo->prepare(
-            "UPDATE equipes SET budget = :budget WHERE id = :id"
+            "UPDATE teams SET budget = :budget WHERE id = :id"
         );
         return $stmt->execute([
             'budget' => $newBudget,
@@ -86,8 +82,7 @@ class EquipeRepo
 
     public static function deleteEquipe(PDO $pdo, int $id): bool
     {
-        $stmt = $pdo->prepare("DELETE FROM equipes WHERE id = ?");
+        $stmt = $pdo->prepare("DELETE FROM teams WHERE id = ?");
         return $stmt->execute([$id]);
     }
-
 }

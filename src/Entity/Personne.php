@@ -1,10 +1,11 @@
 <?php
 abstract class Personne {
+    public ?int $person_id = null;
+
     public function __construct(
-        public string $nom,
+        public string $name,
         public string $email,
-        public string $nationalite
+        public string $nationality,
     ) {}
 
-    // abstract public function getAnnualCost(): float;
 }

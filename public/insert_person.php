@@ -13,48 +13,41 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
 $pdo = Database::getInstance()->getConnection();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nom = trim($_POST['nom']);
+    $name = trim($_POST['name']);
     $email = trim($_POST['email']);
-    $nationalite = trim($_POST['nationalite']);
+    $nationality = trim($_POST['nationality']);
     $type = $_POST['type'];
     try {
         if ($type === 'joueur') {
 
             $joueur = new Joueur(
-                $nom,
+                $name,
                 $email,
-                $nationalite,
+                $nationality,
                 trim($_POST['pseudo']),
                 trim($_POST['role']),
-                floatval($_POST['salaire']),
-                floatval($_POST['bonus'])
+                floatval($_POST['market_value'])
             );
 
     $repo = new JoueursRepo();
     $repo->save($pdo,$joueur);
 
-            // $repo->addToTeam($pdo, $joueur->id, 3);
         } elseif ($type === 'coach') {
             $coach = new Coach(
-                $nom,
+                $name,
                 $email,
-                $nationalite,
+                $nationality,
                 trim($_POST['styleDeCoaching']),
-                intval($_POST['anneesExperience']),
-                floatval($_POST['coachSalaire']),
-                floatval($_POST['fraisDeplacement'])
+                floatval($_POST['years_of_experience'])
             );
-
-
-            $coach->save($pdo);
+            $coach = CoachRepo::create($pdo,$coach);
         }
-
-        $_SESSION['success'] = ucfirst($type) . " ajouté(e) avec succès !";
         header("Location: ../roles/index.php");
         exit;
     } catch (Exception $e) {
-        $_SESSION['error'] = "Erreur lors de l'ajout : " . $e->getMessage();
-        header("Location: add_person.php");
-        exit;
+        echo $e;
+        // $_SESSION['error'] = "Erreur lors de l'ajout : " . $e->getMessage();
+        // header("Location: ./joueur/Add_Joueur_Coach_form.php");
+        // exit;
     }
 }

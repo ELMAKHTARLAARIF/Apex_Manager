@@ -1,54 +1,63 @@
 /* ===============================
-   GENERAL
+   ROOT
+================================= */
+:root {
+    --bg: #f3f4f6;
+    --card: #ffffff;
+    --primary: #1f2933;
+    --primary-hover: #111827;
+    --accent: #0f766e;
+    --accent-hover: #115e59;
+    --danger: #b91c1c;
+    --border: #e5e7eb;
+    --text: #111827;
+    --muted: #6b7280;
+    --radius: 10px;
+}
+
+/* ===============================
+   RESET
 ================================= */
 * {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #f5f5f5;
-    margin: 0;
-    padding: 0;
-    color: #333;
-}
-
-a {
-    text-decoration: none;
-    color: #1f1f1f;
-}
-
-h1, h2, h3, h4 {
-    margin: 10px 0;
+    font-family: Inter, system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
 }
 
 /* ===============================
    HEADER
 ================================= */
 header {
-    background: #1f1f1f;
+    background: var(--primary);
     color: #fff;
-    padding: 15px 30px;
+    padding: 18px 30px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap;
+    border-bottom: none; /* 🔥 force remove */
 }
 
 header h1 {
-    font-size: 24px;
+    font-size: 22px;
+    font-weight: 700;
 }
 
 header nav a {
-    color: #fff;
-    margin-left: 15px;
-    font-weight: bold;
-    transition: 0.3s;
+    color: #d1d5db;
+    margin-left: 18px;
+    font-weight: 500;
+    text-decoration: none;
 }
 
 header nav a:hover,
 header nav a.active {
-    color: #ffcc00;
+    color: #ffffff;
 }
 
 /* ===============================
@@ -56,56 +65,102 @@ header nav a.active {
 ================================= */
 .container {
     max-width: 1200px;
-    margin: 20px auto;
-    padding: 15px;
+    margin: 30px auto;
+    padding: 0 15px;
 }
 
 /* ===============================
    CARDS
 ================================= */
 .card {
-    background: #fff;
-    padding: 20px;
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 25px;
     margin-bottom: 25px;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    border: 1px solid var(--border);
+}
+
+/* ===============================
+   HEADINGS
+================================= */
+h2 {
+    margin-bottom: 15px;
+    font-size: 20px;
+}
+
+h3 {
+    margin: 15px 0 10px;
 }
 
 /* ===============================
    FORMS
 ================================= */
-form label {
+label {
     display: block;
-    margin: 8px 0 4px;
-    font-weight: bold;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    margin-bottom: 5px;
 }
 
-form input, form select, form button {
+input,
+select {
     width: 100%;
-    max-width: 400px;
-    padding: 8px 10px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
+    padding: 11px 12px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
     font-size: 14px;
+    background: #fff;
 }
 
-form input:focus, form select:focus {
-    border-color: #1f1f1f;
+input:focus,
+select:focus {
+    border-color: var(--accent);
     outline: none;
 }
 
-form button {
-    background: #1f1f1f;
-    color: #fff;
+/* ===============================
+   BUTTONS
+================================= */
+/* ===============================
+   BUTTONS (UPDATED)
+================================= */
+button,
+.btn {
+    padding: 11px 18px;
+    border-radius: 8px;
     border: none;
+    font-weight: 600;
     cursor: pointer;
-    transition: 0.3s;
+    background: #055d61;      /* dark neutral */
+    transition: 0.25s ease;
+    color: white;
 }
 
-form button:hover {
-    background: #333;
+button:hover,
+.btn:hover {
+    background: #1a1a1a;
 }
+
+/* Accent button (Add / Confirm / Save) */
+.btn-accent {
+    background: #3f7f6c;     /* muted green */
+}
+
+.btn-accent:hover {
+    background: #2f5f52;
+}
+
+/* Danger button (Delete) */
+.btn-danger {
+    background: #c01414;
+}
+
+.btn-danger:hover {
+    background: #7f1a1a;
+}
+
 
 /* ===============================
    TABLES
@@ -116,45 +171,79 @@ table {
     margin-top: 15px;
 }
 
-table th, table td {
-    padding: 10px;
-    border: 1px solid #ddd;
+th, td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border);
     text-align: left;
 }
 
-table th {
-    background: #1f1f1f;
-    color: #fff;
+th {
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: uppercase;
 }
 
-table tr:nth-child(even) {
-    background: #f9f9f9;
-}
-
-table tr:hover {
-    background: #f1f1f1;
+tr:hover {
+    background: #f9fafb;
 }
 
 /* ===============================
-   BUTTON LINKS
+   DELETE LINK
 ================================= */
-.links {
-    margin: 20px 0;
+.deleteEquipe {
+    color: var(--danger);
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
 }
 
-.links .btn {
-    display: inline-block;
-    margin-right: 10px;
-    padding: 10px 20px;
-    background: #1f1f1f;
-    color: #fff;
-    border-radius: 5px;
-    font-weight: bold;
-    transition: 0.3s;
+.deleteEquipe:hover {
+    text-decoration: underline;
+    color: #ec0303;
 }
 
-.links .btn:hover {
-    background: #333;
+/* ===============================
+   MODAL
+================================= */
+.modal {
+    display: none;
+    position: fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-box {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.modal-box p {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+/* ===============================
+   ADD PLAYER TO TEAM
+================================= */
+.add-player-to-team {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 25px;
+    border: 1px solid var(--border);
+    max-width: 500px;
+    margin: auto;
 }
 
 /* ===============================
@@ -164,372 +253,110 @@ table tr:hover {
     header {
         flex-direction: column;
         align-items: flex-start;
-    }
-
-    header nav {
-        margin-top: 10px;
-    }
-
-    form input, form select, form button {
-        max-width: 100%;
+        gap: 10px;
     }
 }
-/* ===============================
-   GENERAL
-================================= */
-* {
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #f5f5f5;
-    margin: 0;
-    padding: 0;
-    color: #333;
-}
-
-a {
+.add_button{
+    color: white;
     text-decoration: none;
-    color: #1f1f1f;
 }
-
-h1, h2, h3, h4 {
-    margin: 10px 0;
-}
-
 /* ===============================
-   HEADER
+   LOGIN PAGE (MATCHES YOUR STYLE)
 ================================= */
-header {
-    background: #1f1f1f;
-    color: #fff;
-    padding: 15px 30px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-header h1 {
-    font-size: 24px;
-}
-
-header nav a {
-    color: #fff;
-    margin-left: 15px;
-    font-weight: bold;
-    transition: 0.3s;
-}
-
-header nav a:hover,
-header nav a.active {
-    color: #ffcc00;
-}
-
-/* ===============================
-   CONTAINER
-================================= */
-.container {
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 15px;
-}
-
-/* ===============================
-   CARDS
-================================= */
-.card {
-    background: #fff;
-    padding: 20px;
-    margin-bottom: 25px;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-}
-
-/* ===============================
-   FORMS
-================================= */
-form label {
-    display: block;
-    margin: 8px 0 4px;
-    font-weight: bold;
-}
-
-form input, form select, form button {
-    width: 100%;
-    max-width: 400px;
-    padding: 8px 10px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    font-size: 14px;
-}
-
-form input:focus, form select:focus {
-    border-color: #1f1f1f;
-    outline: none;
-}
-
-form button {
-    background: #1f1f1f;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-form button:hover {
-    background: #333;
-}
-
-/* ===============================
-   TABLES
-================================= */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 15px;
-}
-
-table th, table td {
-    padding: 10px;
-    border: 1px solid #ddd;
-    text-align: left;
-}
-
-table th {
-    background: #1f1f1f;
-    color: #fff;
-}
-
-table tr:nth-child(even) {
-    background: #f9f9f9;
-}
-
-table tr:hover {
-    background: #f1f1f1;
-}
-
-/* ===============================
-   BUTTON LINKS
-/* ===============================
-   LOGIN / SIGNUP PAGES
-================================= */
-body.login-page {
-    background: linear-gradient(120deg, #1f1f1f, #3a3a3a);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+.login-page {
+    min-height: 100vh;
+    background: linear-gradient(145deg, #1f2933, #0f141a);
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
 }
 
+/* Login card */
 .login-card {
-    background: #fff;
-    padding: 40px 30px;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     width: 100%;
-    max-width: 400px;
+    max-width: 380px;
+    background: #ffffff;
+    padding: 35px 30px;
+    border-radius: 14px;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.35);
     text-align: center;
-    transition: transform 0.3s ease;
 }
 
-.login-card:hover {
-    transform: translateY(-5px);
-}
-
+/* Title */
 .login-card h2 {
-    margin-bottom: 25px;
-    color: #1f1f1f;
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #1f2933;
 }
 
-.login-card input,
-.login-card select {
-    width: 100%;
-    padding: 12px 15px;
-    margin-bottom: 15px;
+/* Messages */
+.login-card .error-message {
+    background: #fde8e8;
+    color: #991b1b;
+    padding: 10px;
     border-radius: 8px;
-    border: 1px solid #ccc;
+    font-size: 13px;
+    margin-bottom: 12px;
+}
+
+.login-card p[style*="color:green"] {
+    background: #e6f4f1;
+    color: #065f46 !important;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin-bottom: 12px;
+}
+
+/* Inputs */
+.login-card input {
+    width: 100%;
+    padding: 13px 14px;
+    margin-bottom: 14px;
+    border-radius: 10px;
+    border: 1px solid #d1d5db;
     font-size: 14px;
-    transition: all 0.3s;
+    transition: 0.25s ease;
 }
 
-.login-card input:focus,
-.login-card select:focus {
-    border-color: #1f1f1f;
+.login-card input:focus {
+    border-color: #3f7f6c;
+    box-shadow: 0 0 0 3px rgba(63,127,108,0.15);
     outline: none;
-    box-shadow: 0 0 5px rgba(31,31,31,0.4);
 }
 
+/* Button */
 .login-card button {
     width: 100%;
-    padding: 12px;
-    background: #1f1f1f;
+    padding: 13px;
+    margin-top: 5px;
+    background: #1f2933;
     color: #fff;
     border: none;
-    border-radius: 8px;
-    font-weight: bold;
-    font-size: 16px;
+    border-radius: 10px;
+    font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: 0.3s;
 }
 
 .login-card button:hover {
-    background: #333;
-    transform: translateY(-2px);
+    background: #000;
+    transform: translateY(-1px);
 }
 
-.login-card p {
-    margin-top: 10px;
-    font-size: 14px;
-}
-
+/* Signup link */
 .signup-link {
     display: inline-block;
-    padding: 8px 20px;
-    background: #1f1f1f;
-    color: #fff;
+    margin-top: 10px;
+    padding: 6px 14px;
     border-radius: 6px;
-    font-weight: bold;
-    text-decoration: none;
-    transition: all 0.3s ease;
+    background: #f3f4f6;
+    font-weight: 600;
+    font-size: 13px;
+    color: #1f2933;
+    transition: 0.25s;
 }
 
 .signup-link:hover {
-    background: #333;
-    transform: translateY(-2px);
-}
-
-.error-message {
-    color: #d9534f;
-    margin-bottom: 10px;
-    font-weight: bold;
-}
-
-/* Responsive */
-@media (max-width: 480px) {
-    .login-card {
-        padding: 30px 20px;
-    }
-    .login-card input, .login-card select, .login-card button {
-        font-size: 14px;
-        padding: 10px;
-    }
-}
-.delete{
-    color: red;
-    width: 60px;
-    height: 30px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 1px solid rgb(21, 19, 19);
-    border-radius: 5px;
-    font-weight: bold;
-}
-.delete:hover{
-    background-color: red;
-    color: white;
-    cursor: pointer;
-}
-/* Modal background */
-.modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(3, 23, 22, 0.75);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  opacity: 0;
-  pointer-events: none;
-  transition: 0.3s ease;
-}
-
-/* Show modal */
-.modal.show {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-/* Modal box */
-.modal-box {
-  background: #032F30;
-  color: #EAF7F7;
-  padding: 1.5rem;
-  width: 300px;
-  border-radius: 14px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-  animation: pop 0.3s ease;
-}
-
-@keyframes pop {
-  from {
-    transform: scale(0.9);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-.modal-box h3 {
-  margin-bottom: 0.5rem;
-}
-
-.modal-box p {
-  font-size: 0.9rem;
-  color: #6BA3BE;
-  margin-bottom: 1.5rem;
-}
-
-/* Buttons */
-.modal-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-}
-
-.btn {
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-/* Cancel button */
-.btn.cancel {
-  background: #274D60;
-  color: #fff;
-}
-
-/* Delete button */
-.btn.delete {
-  background: #0C969C;
-  color: #031716;
-}
-
-.btn.delete:hover {
-  background: #6BA3BE;
-}
-.add_button{
-    background-color: #032F30;
-    margin: 10px;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-    transition:  0.3s ease;
-}
-.add_button a{
-    color: white;
-    text-decoration: none;
-}
-.add_button:hover{
-    background-color: #0C969C;
-    color: #031716;
+    background: #e5e7eb;
 }

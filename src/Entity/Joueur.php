@@ -3,23 +3,22 @@ require_once 'Personne.php';
 
 class Joueur extends Personne
 {
-    public ?int $id = null;
+     public ?int $personId = null;
     public ?int $equipeId = null;
     public function __construct(
         string $nom,
         string $email,
-        string $nationalite,
+        string $nationality,
         public string $pseudo,
         public string $role,
-        public float $amount,
-        public float $bonus
+        public float $market_value,
     ) {
-        parent::__construct($nom, $email, $nationalite);
+        parent::__construct($nom, $email, $nationality);
     }
 
     public   function getAnnualCost(): float
     {
-        return $this->amount * 12 + $this->bonus;
+        return $this->market_value * 12;
     }
     // public static function getTotalAnnualCost(PDO $pdo): float
     // {

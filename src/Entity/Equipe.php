@@ -1,11 +1,11 @@
 <?php
 
-class Equipe
+class Equipe 
 {
     public ?int $id = null;
 
     public function __construct(
-        public string $nom,
+        public string $name,
         public float $budget,
         public string $manager
     ) {}

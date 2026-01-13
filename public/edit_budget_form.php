@@ -19,7 +19,8 @@ $teams = EquipeRepo::all($pdo);
 
 <body>
 <?php
-require_once './assets/header.php';
+session_start();
+require_once '../public/assets/secondHeader.php';
 ?>
 
     <main class="container">
@@ -29,7 +30,7 @@ require_once './assets/header.php';
                 <option value="">-- Choisir --</option>
                 <?php foreach ($teams as $t):
                 ?>
-                    <option value="<?= $t->id ?>"><?= htmlspecialchars($t->nom) ?> (<?= number_format($t->budget, 2, ',', ' ') ?> €)</option>
+                    <option value="<?= $t->id ?>"><?= htmlspecialchars($t->name) ?> (<?= number_format($t->budget, 2, ',', ' ') ?> €)</option>
                 <?php endforeach; ?>
             </select>
             <label>Nouveau budget</label>

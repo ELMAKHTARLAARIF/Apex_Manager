@@ -1,20 +1,19 @@
 <?php
-session_start();
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 require_once __DIR__ . '/../../autoload.php';
-
-if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['admin', 'journalist'])) {
-    header("Location: ../auth/login.php");
+require_once __DIR__ . '/../../auth/auth.php';
+if (!isAdmin()) {
+    header('Location: user_home.php');
     exit;
 }
+
 
 $pdo = Database::getInstance()->getConnection();
 
 $teams = EquipeRepo::all($pdo);
-
-
+$members = JoueursRepo::all($pdo);
 ?>
 
 <!DOCTYPE html>
@@ -22,43 +21,76 @@ $teams = EquipeRepo::all($pdo);
 
 <head>
     <meta charset="UTF-8">
-    <title>Équipes – Apex Manager</title>
+    <title>Equipes – Apex Manager</title>
     <link rel="stylesheet" href="../assets/style.css">
+    <script src="../assets/Equipe.js" defer></script>
 </head>
 
 <body>
-    <header>
-        <h1>Équipes – Apex Manager</h1>
-        <nav>
-            <?php if ($_SESSION['user']['role'] === 'admin'): ?>
-                <a href="/Apex_Mercato/roles/index.php">Dashboard Admin</a>
-
-            <?php endif; ?>
-        </nav>
-    </header>
+    <?php require_once '../assets/secondHeader.php' ?>
 
     <main class="container">
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Nom</th>
-                    <th>Budget</th>
-                    <th>Manager</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($teams as $team): ?>
+        <section class="card">
+            <h2>Liste des équipes</h2>
+            <table>
+                <thead>
                     <tr>
-                        <td><?= htmlspecialchars($team->nom) ?></td>
-                        <td><?= number_format($team->budget, 2, ',', ' ') ?> €</td>
-                        <td><?= htmlspecialchars($team->manager) ?></td>
+                        <th>Nom</th>
+                        <th>Budget</th>
+                        <th>Manager</th>
+                        <th>Membres</th>
+                        <th>action</th>
                     </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <?php foreach ($teams as $team): ?>
+                        <tr>
+                            <td><?= htmlspecialchars($team["name"]) ?></td>
+                            <td><?= number_format($team["budget"], 2, ',', ' ') ?> €</td>
+                            <td><?= htmlspecialchars($team["manager"]) ?></td>
+                            <td>
+                                <?php
+
+                                foreach ($members as $m) {
+                                    echo htmlspecialchars($m["pseudo"] ?? $m['name']) . " (" . ($m["type"] ?? 'coach') . ")<br>";
+                                }
+                                ?>
+                            </td>
+                            <td>
+                                <a class="delete deleteEquipe" onclick="openDeleteModal()">Delete</a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+            <button class="add_button AddEquipe"><a class="add_button" href="Add_Equipe_form.php">Ajouter un Equipe</a></button>
+            <button class="add_button AddEquipe"><a class="add_button" href="../joueur/Add_player_to_team_form.php">Ajouter un Joueur dans L'Equipe</a></button>
+
+        </section>
+        <!-- Delete Confirmation Modal -->
+        <div class="modal" id="deleteModal">
+            <div class="modal-box">
+                <h3>Delete Équipe</h3>
+                <p class="message">Are you sure you want to delete this équipe?</p>
+
+                <div class="modal-actions">
+                    <button class="btn cancel" onclick="closeModal()">Cancel</button>
+
+                    <form method="POST" action="delete_Equipe.php?id=<?= $team["id"] ?>">
+                        <input type="hidden" name="id" id="deleteEquipeId">
+                        <button type="submit" class="btn delete">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+
 
     </main>
+
+
 
 </body>
 

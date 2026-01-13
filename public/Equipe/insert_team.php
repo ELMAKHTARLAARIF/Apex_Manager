@@ -10,7 +10,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
     $equipe = new Equipe($_POST['nom'], (float)$_POST['budget'], $_POST['manager']);
     $equipeRepo = new EquipeRepo();
     $equipeRepo->createEquipe($pdo,$equipe);
-    header("location: /../Apex_Mercato/roles/index.php");
+    header("location: display_teams.php");
     exit;
 }
 ?>

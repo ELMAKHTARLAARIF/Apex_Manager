@@ -1,19 +1,15 @@
 <?php
+
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 require_once __DIR__ . '/../autoload.php';
-require_once __DIR__ . '/../auth/auth.php';
-if (!isAdmin()) {
-    header('Location: user_home.php');
-    exit;
-}
-
-
+session_start();
 $pdo = Database::getInstance()->getConnection();
 
-$teams = EquipeRepo::all($pdo);
-$members = JoueursRepo::all($pdo);
+$players = JoueursRepo::all($pdo);
+$coachs = CoachRepo::all($pdo);
+
 ?>
 
 <!DOCTYPE html>
@@ -21,9 +17,9 @@ $members = JoueursRepo::all($pdo);
 
 <head>
     <meta charset="UTF-8">
-    <title>Equipes – Apex Manager</title>
-    <link rel="stylesheet" href="../public/assets/style.css">
-    <script src="../public/assets/Coach.js" defer></script>
+    <title>Liste des membres – Apex Manager</title>
+    <link rel="stylesheet" href="../public/assets//style.css">
+    <script src="../public/assets/members.js"></script>
 </head>
 
 <body>
@@ -31,60 +27,53 @@ $members = JoueursRepo::all($pdo);
 
     <main class="container">
 
-        <section class="card">
-            <h2>Liste des équipes</h2>
-            <table>
-                <thead>
+        <input type="text" id="searchInput" placeholder="Rechercher un membre..." style="margin-bottom:15px;padding:8px;width:100%;border-radius:5px;border:1px solid #ccc;">
+
+        <table id="membersTable">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Email</th>
+                    <th>Nationalité</th>
+                    <th>Type</th>
+                    <th>Détails financiers / Expérience</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($players as $player): ?>
                     <tr>
-                        <th>Nom</th>
-                        <th>Budget</th>
-                        <th>Manager</th>
-                        <th>Membres</th>
-                        <th>action</th>
+                        <td><?= htmlspecialchars($player['name']) ?></td>
+                        <td><?= htmlspecialchars($player['email']) ?></td>
+                        <td><?= htmlspecialchars($player['nationality']) ?></td>
+                        <td>Joueur</td>
+                        <td>Amount: <?= number_format($player['market_value'], 0, ',', ' ') ?> €</td>
+                        <td>
+                            <a href="../public/joueur/deleteJou.php?id=<?= $player['person_id'] ?>" ><button>delete</button></a>
+                            <a href="../public/joueur/update_form.php?id=<?= $player['person_id'] ?>" ><button>update</button></a>
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($teams as $team): ?>
-                        <tr>
-                            <td><?= htmlspecialchars($team->nom) ?></td>
-                            <td><?= number_format($team->budget, 2, ',', ' ') ?> €</td>
-                            <td><?= htmlspecialchars($team->manager) ?></td>
-                            <td>
-                                <?php
+                <?php endforeach; ?>
 
-                                foreach ($members as $m) {
-                                    echo htmlspecialchars($m->pseudo ?? $m['nom']) . " (" . ($m->type ?? 'coach') . ")<br>";
-                                }
-                                ?>
-                            </td>
-                            <td>
-                                <a class="delete deleteEquipe" href="../public/Equipe/delete_Equipe.php?id=<?=$team->id?>">Delete</a>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-            <button class="add_button JouCoa"><a href="../public/joueur/Add_Joueur_Coach_form.php">Ajouter un Joueur ou un Coach</a></button>
-            <button class="add_button AddEquipe"><a href="../public/Equipe/Add_Equipe_form.php">Ajouter un Equipe</a></button>
-            <button class="add_button AddEquipe"><a href="../public/Equipe/Add_Equipe_form.php">Ajouter un Joueur dans L'Equipe</a></button>
+                <?php foreach ($coachs as $coach): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($coach->name) ?></td>
+                        <td><?= htmlspecialchars($coach->email) ?></td>
+                        <td><?= htmlspecialchars($coach->nationality) ?></td>
+                        <td>Coach</td>
+                        <td>Style de coaching: <?= htmlspecialchars($coach->coaching_style) ?><br>Années d'expérience: <?= (int) $coach->years_of_experience ?></td>
+                        <td>
+                            <a href="../public/Coach/deleteCoach.php?person_id=<?= $coach->person_id ?>" ><button>delete</button></a>
+                            <a href="../public/Coach/update_coach_form.php?person_id=<?= $coach->person_id?>" ><button>update</button></a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+                <button class="add_button JouCoa"><a class="add_button" href="../public/joueur/Add_Joueur_Coach_form.php">Ajouter un Joueur ou un Coach</a></button>
 
-        </section>
-        <!-- Delete Confirmation Modal -->
-        <div class="modal" id="deleteModal">
-            <div class="modal-box">
-                <h3>Delete Coach</h3>
-                <p class="message">Are you sure you want to delete this coach?</p>
+            </tbody>
+        </table>
 
-                <div class="modal-actions">
-                    <button class="btn cancel" onclick="closeModal()">Cancel</button>
-                    <button class="btn delete" id="confirmDeleteBtn">Delete</button>
-
-                </div>
-            </div>
-        </div>
-
-
-
+        <div id="pagination" style="margin-top:15px;text-align:center;"></div>
     </main>
 
 

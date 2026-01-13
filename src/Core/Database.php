@@ -9,7 +9,7 @@ class Database
     private function __construct()
     {
         $this->pdo = new PDO(
-            "mysql:host=localhost;dbname=Apex_Manager;charset=utf8mb4", 
+            "mysql:host=localhost;dbname=Apex_Mercato;charset=utf8mb4", 
             "root",
             "laarif+osb2002",
             [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
@@ -29,4 +29,3 @@ class Database
         return $this->pdo;
     }
 }
-?>

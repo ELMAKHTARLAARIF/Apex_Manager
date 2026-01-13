@@ -16,13 +16,18 @@ final class TransferHelper
     public function getTransferDetails()
     {
         $transferts = $this->pdo->query("
-    SELECT j.pseudo, td.nom AS depart, ta.nom AS arrivee, t.montant
-    FROM transferts t
-    JOIN joueurs j ON j.id = t.joueur_id
-    JOIN equipes td ON td.id = t.equipe_depart_id
-    JOIN equipes ta ON ta.id = t.equipe_arrivee_id
-    WHERE t.statut='termine'
+SELECT 
+    p.pseudo,
+    td.name AS depart,
+    ta.name AS arrivee,
+    t.amount
+FROM transfers 
+JOIN players ON players.person_id = transfers.person_id
+JOIN teams td  ON td.id = transfers.current_team_id
+JOIN teams ta  ON ta.id = transfers.new_team_id
+WHERE t.status = 'valid';
+
 ")->fetchAll();
-return $transferts;
+        return $transferts;
     }
 }

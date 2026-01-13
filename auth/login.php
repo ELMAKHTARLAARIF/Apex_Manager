@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 require_once __DIR__ . '/../autoload.php';
 
 session_start();
@@ -12,9 +15,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'];
 
     $stmt = $pdo->prepare(
-        "SELECT * FROM users WHERE username = ? OR email = ?"
+        "SELECT * FROM users WHERE  email = ?"
     );
-    $stmt->execute([$username, $username]);
+    $stmt->execute([ $username]);
     $user = $stmt->fetch();
 
     if ($user && password_verify($password, $user['password'])) {
@@ -34,7 +37,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header("Location: ../roles/user_home.php");
         }
         exit;
-
     } else {
         $message = "Identifiants incorrects.";
     }
@@ -43,36 +45,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <title>Connexion – Apex Manager</title>
     <link rel="stylesheet" href="../public/assets/style.css">
 </head>
+
 <body class="login-page">
+    
+    <div class="login-card">
+        <h2>Connexion</h2>
 
-<div class="login-card">
-    <h2>Connexion</h2>
+        <?php if (isset($_GET['success'])): ?>
+            <p style="color:green;font-weight:bold;">
+                Compte créé avec succès !
+            </p>
+        <?php endif; ?>
 
-    <?php if (isset($_GET['success'])): ?>
-        <p style="color:green;font-weight:bold;">
-            Compte créé avec succès !
+        <?php if ($message): ?>
+            <p class="error-message"><?= htmlspecialchars($message) ?></p>
+        <?php endif; ?>
+
+        <form method="post">
+            <input type="text" name="username" placeholder="Username ou Email" required>
+            <input type="password" name="password" placeholder="Mot de passe" required>
+            <button type="submit">Se connecter</button>
+        </form>
+
+        <p style="margin-top:15px;">
+            Pas de compte ? <a href="signup.php" class="signup-link">Créer un compte</a>
         </p>
-    <?php endif; ?>
-
-    <?php if ($message): ?>
-        <p class="error-message"><?= htmlspecialchars($message) ?></p>
-    <?php endif; ?>
-
-    <form method="post">
-        <input type="text" name="username" placeholder="Username ou Email" required>
-        <input type="password" name="password" placeholder="Mot de passe" required>
-        <button type="submit">Se connecter</button>
-    </form>
-
-    <p style="margin-top:15px;">
-        Pas de compte ? <a href="signup.php" class="signup-link">Créer un compte</a>
-    </p>
-</div>
+    </div>
 
 </body>
+
 </html>

@@ -16,7 +16,7 @@ if($_SERVER['REQUEST_METHOD'] = "GET"){
     $deletedEquipe = EquipeRepo::deleteEquipe($pdo,$EquipeId);
     if($deletedEquipe)
     {
-        header("location: /../Apex_Mercato/roles/index.php");// errorherefix it tomorrow
+        header("location: display_teams.php");// errorherefix it tomorrow
         exit;
     }
     else{
